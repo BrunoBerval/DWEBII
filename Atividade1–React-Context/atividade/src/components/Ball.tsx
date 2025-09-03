@@ -1,7 +1,8 @@
+//components/Ball.tsx
 import type { CSSProperties } from "react";
 
 interface Props {
-    value: number;
+    value: string;
 }
 
 export default function Ball(props:Props) {

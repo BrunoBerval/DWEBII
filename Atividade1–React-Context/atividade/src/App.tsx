@@ -1,23 +1,18 @@
-// App.tsx
-// Componente principal da aplicação
-// Responsável por renderizar o Input e o Display dentro do Provider de contexto
 import type { CSSProperties } from "react";
+import { NumbersProvider } from "./context/NumbersContext";
 import Display from "./components/Display";
 import Input from "./components/Input";
-import { EntradaProvider } from "./components/EntradaContext";
 
 export default function App() {
   return (
-    // O Provider disponibiliza o estado global "entrada" para os componentes filhos
-    <EntradaProvider>
+    <NumbersProvider>
       <div style={containerSld}>
         <Input />
         <Display />
       </div>
-    </EntradaProvider>
-  );
+    </NumbersProvider>
+  )
 }
-
 
 const containerSld: CSSProperties = {
   display: "flex",
@@ -26,5 +21,7 @@ const containerSld: CSSProperties = {
   padding: "20px",
   borderRadius: "10px",
   width: "600px",
-  gap: "20px"
+  gap: "20px",
+  margin: "auto",
+  marginTop: "50px"
 };

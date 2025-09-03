@@ -1,12 +1,25 @@
+//components/Display.tsx
 import type { CSSProperties } from "react";
+import { useNumbersContext } from "../context/NumbersContext";
 import Ball from "./Ball";
 
 export default function Display(){
-    return <div style={containerSld}>
-        <Ball value={11} />
-        <Ball value={22} />
-        <Ball value={33} />
+  const { numbers } = useNumbersContext();
+
+  return (
+    <div style={containerSld}>
+      {numbers.length === 0 ? (
+        <span style={textInfo }>Sem entrada</span>
+      ) : (
+        numbers.map((num, index) => <Ball key={index} value={num} />)
+      )}
     </div>
+  )
+}
+
+const textInfo: CSSProperties = {
+    color: "#fff", 
+    fontSize: "1.25rem"
 }
 
 const containerSld: CSSProperties = {
