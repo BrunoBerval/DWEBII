@@ -5,7 +5,7 @@ interface NumbersContextType {
   numbers: string[];
   setNumbers: (numbers: string[]) => void;
 }
-
+ 
 // Criação do contexto
 const NumbersContext = createContext<NumbersContextType | undefined>(undefined);
 
