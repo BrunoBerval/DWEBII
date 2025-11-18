@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    /* 🧠 Compatibilidade com Node.js moderno (Perfeito) */
+    "target": "ES2020",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+
+    /* 💡 Permite importações como './file.ts' (Correto) */
+    "allowImportingTsExtensions": true,
+    
+    /* 🛑 RECOMENDAÇÃO: Desativa a saída de arquivos se estiver usando ts-node-dev/ts-node */
+    "noEmit": true,
+
+    /* 📁 Estrutura de pastas (Manter para a verificação de tipos) */
+    "rootDir": "./src",
+    // Removi 'outDir' porque 'noEmit' está definido como true, tornando-o redundante.
+    // Se for compilar (build de produção), remova "noEmit: true" e mantenha "outDir": "./dist".
+
+    /* ⚙️ Melhorias gerais (Correto) */
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "strict": true,
+
+    /* 🧩 Desativa opções novas que causam erro com ts-node-dev (Necessário para a compatibilidade) */
+    "verbatimModuleSyntax": false,
+    "isolatedModules": false
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}

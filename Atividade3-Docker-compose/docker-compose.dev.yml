@@ -1,0 +1,69 @@
+services:
+  postgres-megasena:
+    image: postgres:17-alpine
+    container_name: postgres-megasena
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      POSTGRES_USER: ${DBUSER}
+      POSTGRES_PASSWORD: ${DBPASSWORD}
+      POSTGRES_DB: ${DBNAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+      - ./db/create-table.sql:/docker-entrypoint-initdb.d/1-create-table.sql
+      - ./db/copy-table.sql:/docker-entrypoint-initdb.d/2-copy-table.sql
+      - ./db/csv:/csv
+    networks:
+      - dwebii-network
+
+  server-app:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: server-app
+    restart: always
+    networks:
+      - dwebii-network
+    depends_on:
+      - postgres-megasena
+    env_file:
+      - ./.env
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules   # mantém dependências dentro do container
+      - ./logs:/usr/src/app/logs
+    command: npm run dev
+    ports:
+      - "3003:3000"
+
+  front-app:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    container_name: front-app
+    restart: always
+    networks:
+      - dwebii-network
+    env_file:
+      - ./.env
+    depends_on:
+      - server-app
+    environment:
+      CHOKIDAR_USEPOLLING: "true"   # garante hot reload dentro do container
+    volumes:
+      - ./front:/usr/src/app        # código local
+      - /usr/src/app/node_modules   # mantém dependências no container
+    command: npm run dev -- --host
+    ports:
+      - "3333:5173"
+
+volumes:
+  db_data:
+
+networks:
+  dwebii-network:
+    driver: bridge
+
