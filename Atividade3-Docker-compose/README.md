@@ -5,8 +5,8 @@
 
 1. Clonar o repositório e instalar dependências:
 ```bash
-git clone https://github.com/BrunoBerval/DWEBII/Atividade3-Docker-compose/atividade .
-cd Atividade3-Docker-compose/atividade
+git clone https://github.com/BrunoBerval/DWEBII .
+cd Atividade3-Docker-compose
 ```
 
 2. Como o projeto roda com bind mount no container, então será necessário instalar as dependências nas pasta `/front` e `/server`:
