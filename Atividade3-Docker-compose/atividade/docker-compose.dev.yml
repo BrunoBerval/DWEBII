@@ -1,63 +1,23 @@
 services:
-  postgres-furnas-campanha:
+  postgres-megasena:
     image: postgres:17-alpine
-    container_name: postgres-furnas-campanha
+    container_name: postgres-megasena
     restart: always
     env_file:
       - ./.env
     environment:
-      POSTGRES_USER: ${DB_FURNAS_USER}
-      POSTGRES_PASSWORD: ${DB_FURNAS_PASSWORD}
-      POSTGRES_DB: ${DB_FURNAS_NAME}
+      POSTGRES_USER: ${DBUSER}
+      POSTGRES_PASSWORD: ${DBPASSWORD}
+      POSTGRES_DB: ${DBNAME}
     ports:
       - "5433:5432"
     volumes:
-      - furnas_campanha_data:/var/lib/postgresql/data
-      - ./furnas-campanha/create-table.sql:/docker-entrypoint-initdb.d/1-create-table.sql
-      - ./furnas-campanha/copy-table.sql:/docker-entrypoint-initdb.d/2-copy-table.sql
-      - ./furnas-campanha/csv:/csv
+      - db:/var/lib/postgresql/data
+      - ./db/create-table.sql:/docker-entrypoint-initdb.d/1-create-table.sql
+      - ./db/copy-table.sql:/docker-entrypoint-initdb.d/2-copy-table.sql
+      - ./db/csv:/csv
     networks:
-      - abp-network
-
-  postgres-sima:
-    image: postgres:17-alpine
-    container_name: postgres-sima
-    restart: always
-    env_file:
-      - ./.env
-    environment:
-      POSTGRES_USER: ${DB_SIMA_USER}
-      POSTGRES_PASSWORD: ${DB_SIMA_PASSWORD}
-      POSTGRES_DB: ${DB_SIMA_NAME}
-    ports:
-      - "5434:5432"
-    volumes:
-      - sima_data:/var/lib/postgresql/data
-      - ./sima/create-table.sql:/docker-entrypoint-initdb.d/1-create-table.sql
-      - ./sima/copy-table.sql:/docker-entrypoint-initdb.d/2-copy-table.sql
-      - ./sima/csv:/csv
-    networks:
-      - abp-network
-
-  postgres-balcar-campanha:
-    image: postgres:17-alpine
-    container_name: postgres-balcar-campanha
-    restart: always
-    env_file:
-      - ./.env
-    environment:
-      POSTGRES_USER: ${DB_BALCAR_USER}
-      POSTGRES_PASSWORD: ${DB_BALCAR_PASSWORD}
-      POSTGRES_DB: ${DB_BALCAR_NAME}
-    ports:
-      - "5435:5432"
-    volumes:
-      - balcar_campanha_data:/var/lib/postgresql/data
-      - ./balcar-campanha/create-table.sql:/docker-entrypoint-initdb.d/1-create-table.sql
-      - ./balcar-campanha/copy-table.sql:/docker-entrypoint-initdb.d/2-copy-table.sql
-      - ./balcar-campanha/csv:/csv
-    networks:
-      - abp-network
+      - dwebii-network
 
   server-app:
     build:
@@ -66,7 +26,7 @@ services:
     container_name: server-app
     restart: always
     networks:
-      - abp-network
+      - dwebii-network
     depends_on:
       - postgres-furnas-campanha
       - postgres-sima
@@ -103,11 +63,9 @@ services:
       - "3002:5173"
 
 volumes:
-  furnas_campanha_data:
-  sima_data:
-  balcar_campanha_data:
+  db_data:
 
 networks:
-  abp-network:
+  dwebii-network:
     driver: bridge
 
